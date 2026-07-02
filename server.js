@@ -48,7 +48,7 @@ async function getPayPalAccessToken() {
 
     const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
     
-    const baseUrl = process.env.PAYPAL_MODE === 'live' 
+    const baseUrl = process.env.PAYPAL_MODE === 'production' 
         ? 'https://api-m.paypal.com' 
         : 'https://api-m.sandbox.paypal.com';
 
@@ -73,7 +73,7 @@ async function getPayPalAccessToken() {
 
 // Verify PayPal order
 async function verifyPayPalOrder(accessToken, orderId) {
-    const baseUrl = process.env.PAYPAL_MODE === 'live' 
+    const baseUrl = process.env.PAYPAL_MODE === 'production' 
         ? 'https://api-m.paypal.com' 
         : 'https://api-m.sandbox.paypal.com';
 
