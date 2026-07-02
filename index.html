@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.25, maximum-scale=1.25, minimum-scale=1.25, user-scalable=no" name="viewport">
+    <title>The Non-Technical AI Agency Playbook</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#3c494e",
+                        "on-secondary-container": "#aeb8d0",
+                        "background": "#0a0e1a",
+                        "on-surface": "#dfe2f3",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#00677e",
+                        "on-tertiary-container": "#4f5051",
+                        "surface-container-lowest": "#0a0e1a",
+                        "inverse-on-surface": "#2c303d",
+                        "surface-dim": "#0a0e1a",
+                        "primary-container": "#00d4ff",
+                        "surface": "#0a0e1a",
+                        "outline": "#8892a8",
+                        "on-primary-container": "#00586b",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary-fixed": "#001f27",
+                        "secondary": "#bdc7de",
+                        "surface-container-highest": "#313442",
+                        "secondary-container": "#3f495d",
+                        "on-secondary-fixed": "#121c2d",
+                        "inverse-surface": "#dfe2f3",
+                        "on-secondary-fixed-variant": "#3d475a",
+                        "on-tertiary": "#2f3131",
+                        "surface-tint": "#3cd7ff",
+                        "on-primary": "#0a0e1a",
+                        "surface-container-low": "#171b28",
+                        "primary-fixed": "#b4ebff",
+                        "on-surface-variant": "#8892a8",
+                        "secondary-fixed": "#d9e3fb",
+                        "error-container": "#93000a",
+                        "on-background": "#ffffff",
+                        "on-primary-fixed-variant": "#004e5f",
+                        "tertiary": "#dedfdf",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#bdc7de",
+                        "surface-bright": "#353946",
+                        "tertiary-container": "#c2c3c3",
+                        "surface-container": "#1b1f2c",
+                        "on-error": "#690005",
+                        "primary": "#00d4ff",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-variant": "#313442",
+                        "on-secondary": "#273143",
+                        "primary-fixed-dim": "#3cd7ff",
+                        "surface-container-high": "#262a37",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-fixed": "#e2e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "stack-sm": "8px",
+                        "stack-md": "24px",
+                        "section-padding": "120px",
+                        "stack-lg": "48px",
+                        "gutter": "32px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter", "sans-serif"],
+                        "display-lg-mobile": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "3px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            zoom: 1.25;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0e1a; }
+        ::-webkit-scrollbar-thumb { background: #00d4ff; }
+
+        /* PayPal Modal Styles */
+        #paypal-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #paypal-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        #paypal-modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #paypal-modal.active #paypal-modal-content {
+            transform: scale(1);
+        }
+
+        /* PayPal Button Custom Styles */
+        .paypal-btn-container {
+            min-height: 55px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-background">
+    <!-- Top Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-background/80 backdrop-blur-md border-b border-outline-variant/30">
+        <div class="text-body-lg font-bold tracking-tighter text-on-surface uppercase">AI Agency Playbook</div>
+        <div class="hidden md:flex gap-8 items-center">
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 uppercase" href="#problem">Problem</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 uppercase" href="#modules">Modules</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 uppercase" href="#bonuses">Bonuses</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 uppercase" href="#pricing">Pricing</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 uppercase" href="#faq">FAQ</a>
+            <a class="bg-primary text-background font-bold px-6 py-2 transition-all duration-300 hover:bg-white active:scale-95 text-label-sm uppercase" href="#pricing">Get Access</a>
+        </div>
+        <button class="md:hidden text-primary">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
+
+    <main class="overflow-x-hidden">
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center pt-24 px-gutter border-t border-primary max-w-container-max mx-auto">
+            <div class="absolute left-0 top-0 w-px h-full bg-primary hidden lg:block"></div>
+            <div class="grid lg:grid-cols-2 gap-stack-lg items-center w-full reveal">
+                <div class="space-y-stack-md">
+                    <p class="text-label-sm font-label-sm text-primary uppercase tracking-[3px]">The Complete Guide To</p>
+                    <h1 class="flex flex-col gap-0">
+                        <span class="text-display-lg-mobile md:text-display-lg text-white font-extrabold uppercase leading-none">The Non-Tech</span>
+                        <span class="text-display-lg-mobile md:text-display-lg text-primary font-extrabold uppercase leading-none">AI Agency</span>
+                        <span class="text-display-lg-mobile md:text-display-lg text-white font-extrabold uppercase leading-none">Playbook</span>
+                    </h1>
+                    <p class="text-on-surface-variant text-body-lg max-w-xl">
+                        Land your first 3 clients, build recurring revenue, and scale your AI consulting business — without writing a single line of code.
+                    </p>
+                    <div class="pt-stack-md">
+                        <button onclick="openPayPalModal()" class="inline-block bg-primary text-background text-label-sm font-bold px-10 py-5 hover:bg-white transition-all duration-300 active:scale-95 uppercase cursor-pointer">
+                            Get The Playbook — $27
+                        </button>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -inset-4 border border-outline/20 group-hover:border-primary/40 transition-colors duration-500"></div>
+                    <img class="w-full h-auto object-cover grayscale brightness-90 group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA89ItB7295jPV9ccj85rT4lyNG6ztpnz_AhLom39KJpZISojyabNCC6_h334Gin3IEXWV-_PShUGwEv6NMEl0rgrrWaWxATkzCJ8-gH8PkeQZ2229Hs2vxAa6NHyqKQFJPD3jJw5_aBRXj6DLqgzNnJkbBdhRmXa3kluiahP-llSByh1NV7sUu4DNgbkwUAqxAlZXAPydELzUd0-PyyVzK2g9VSIMY5bMBiBgvwWBF_RinbpbvAoeAXA" alt="AI Agency Playbook">
+                </div>
+            </div>
+        </section>
+
+        <!-- The Problem Section -->
+        <section class="py-section-padding px-gutter max-w-container-max mx-auto border-t border-primary/40" id="problem">
+            <div class="reveal">
+                <h2 class="text-headline-md text-white font-bold uppercase mb-stack-lg">Does This Sound Like You?</h2>
+                <div class="grid md:grid-cols-2 gap-x-12 gap-y-12">
+                    <div class="flex gap-4">
+                        <div class="w-2 h-2 mt-2 bg-primary flex-shrink-0"></div>
+                        <p class="text-on-surface-variant text-body-lg">You see the AI gold rush happening but feel locked out because you aren't a software engineer or data scientist.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-2 h-2 mt-2 bg-primary flex-shrink-0"></div>
+                        <p class="text-on-surface-variant text-body-lg">You've tried selling generic "AI automation" but businesses don't understand the value or how it solves their real problems.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-2 h-2 mt-2 bg-primary flex-shrink-0"></div>
+                        <p class="text-on-surface-variant text-body-lg">You're stuck in a cycle of one-off low-ticket projects and can't figure out how to structure monthly recurring retainers.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-2 h-2 mt-2 bg-primary flex-shrink-0"></div>
+                        <p class="text-on-surface-variant text-body-lg">The technical barrier of complex API integrations and custom coding feels impossible to overcome on your own.</p>
+                    </div>
+                </div>
+                <p class="mt-stack-lg text-primary font-bold text-body-lg uppercase tracking-wider">There's a better way.</p>
+            </div>
+        </section>
+
+        <!-- What's Inside (Bento Grid Style) -->
+        <section class="py-section-padding px-gutter max-w-container-max mx-auto" id="modules">
+            <h2 class="text-headline-md text-white font-bold uppercase mb-stack-lg reveal">What's Inside</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 border-l border-t border-outline/30 reveal">
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">01</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">The Niche Finder</h3>
+                    <p class="text-on-surface-variant">Identify high-value problems in boring industries that are begging for AI implementation without technical debt.</p>
+                </div>
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">02</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">Low-Code Stack</h3>
+                    <p class="text-on-surface-variant">The exact toolset I use to build enterprise-grade AI solutions using only visual builders and natural language.</p>
+                </div>
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">03</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">Client Acquisition</h3>
+                    <p class="text-on-surface-variant">Our "Cold Loom" strategy that bypasses gatekeepers and gets you booked meetings with CEOs in 48 hours.</p>
+                </div>
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">04</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">Pricing Models</h3>
+                    <p class="text-on-surface-variant">How to stop charging by the hour and start selling "Efficiency Gains" for $3,000 - $5,000 per month.</p>
+                </div>
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">05</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">The Delivery Engine</h3>
+                    <p class="text-on-surface-variant">Standard Operating Procedures (SOPs) for onboarding clients and managing expectations during the build phase.</p>
+                </div>
+                <div class="p-8 border-r border-b border-outline/30 hover:border-primary transition-colors duration-300 group">
+                    <span class="text-primary font-bold text-body-lg block mb-4">06</span>
+                    <h3 class="text-white text-headline-md font-bold mb-4">Scaling Up</h3>
+                    <p class="text-on-surface-variant">Transitioning from a solo-consultant to a lean agency by hiring virtual specialists and automation experts.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonuses Section -->
+        <section class="py-section-padding bg-[#0D1320]" id="bonuses">
+            <div class="px-gutter max-w-container-max mx-auto reveal">
+                <h2 class="text-headline-md text-white font-bold uppercase mb-stack-lg text-center">Exclusive Bonuses Included</h2>
+                <div class="grid md:grid-cols-2 gap-stack-md">
+                    <div class="p-stack-lg border border-outline/20 hover:border-primary/50 transition-all duration-300">
+                        <span class="text-label-sm text-primary tracking-widest uppercase mb-4 block">Bonus 01</span>
+                        <h4 class="text-white font-bold text-headline-md mb-4">The Sales Script Vault</h4>
+                        <p class="text-on-surface-variant text-body-md">Exact word-for-word scripts for discovery calls, handling objections, and closing the $10k+ implementation deal.</p>
+                    </div>
+                    <div class="p-stack-lg border border-outline/20 hover:border-primary/50 transition-all duration-300">
+                        <span class="text-label-sm text-primary tracking-widest uppercase mb-4 block">Bonus 02</span>
+                        <h4 class="text-white font-bold text-headline-md mb-4">The AI Tool Directory</h4>
+                        <p class="text-on-surface-variant text-body-md">A curated, regularly updated database of 200+ AI tools categorized by business use-case and technical difficulty.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="py-section-padding px-gutter max-w-container-max mx-auto border-y border-outline/10">
+            <div class="grid md:grid-cols-3 gap-12 reveal">
+                <div class="space-y-4">
+                    <p class="text-on-surface-variant italic text-body-lg">"This playbook completely changed how I look at agency growth. I signed my first retainer client in 10 days using the Niche Finder."</p>
+                    <p class="text-white font-bold uppercase text-label-sm">— James K., Founder of AutomateFlow</p>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-on-surface-variant italic text-body-lg">"The Low-Code Stack section alone is worth 10x the price. I didn't know you could build such complex logic without Python."</p>
+                    <p class="text-white font-bold uppercase text-label-sm">— Sarah L., Digital Consultant</p>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-on-surface-variant italic text-body-lg">"Straight to the point. No fluff. Just a technical blueprint for making real money in the AI space without being a coder."</p>
+                    <p class="text-white font-bold uppercase text-label-sm">— Marcus D., Agency Owner</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="py-section-padding px-gutter" id="pricing">
+            <div class="max-w-2xl mx-auto border border-primary p-12 text-center reveal">
+                <h2 class="text-label-sm text-primary tracking-widest uppercase mb-8">One-Time Investment</h2>
+                <div class="flex flex-col items-center gap-4 mb-10">
+                    <span class="text-on-surface-variant line-through text-body-lg">REGULAR PRICE: $97</span>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-primary text-6xl font-extrabold">$27</span>
+                        <span class="text-on-surface-variant text-label-sm uppercase">Launch Price</span>
+                    </div>
+                </div>
+                <ul class="text-left space-y-4 mb-12 max-w-sm mx-auto">
+                    <li class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                        <span class="text-on-surface-variant">Full Lifetime Access</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                        <span class="text-on-surface-variant">All Bonuses & Updates</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                        <span class="text-on-surface-variant">Community Access</span>
+                    </li>
+                </ul>
+
+                <!-- PayPal Button Container -->
+                <div id="paypal-button-container" class="paypal-btn-container w-full mb-4"></div>
+
+                <!-- Fallback Button (shows if PayPal doesn't load) -->
+                <button id="fallback-paypal-btn" onclick="openPayPalModal()" class="w-full bg-primary text-background font-bold py-6 hover:bg-white transition-all duration-300 uppercase tracking-widest active:scale-95 cursor-pointer" style="display: none;">
+                    Pay with PayPal
+                </button>
+
+                <p class="mt-6 text-on-surface-variant text-label-sm">Secure Checkout • Instant Digital Delivery</p>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-section-padding px-gutter max-w-container-max mx-auto" id="faq">
+            <h2 class="text-headline-md text-white font-bold uppercase mb-stack-lg reveal">Frequently Asked Questions</h2>
+            <div class="divide-y divide-outline/20 reveal">
+                <details class="group py-6 cursor-pointer">
+                    <summary class="flex justify-between items-center list-none text-white font-bold uppercase text-body-lg">
+                        Do I really need zero coding skills?
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant leading-relaxed">
+                        Correct. We focus entirely on the "Logic Layer" of businesses. By using visual builders and LLMs correctly, you can deploy enterprise-level solutions without ever touching a terminal or a script file.
+                    </p>
+                </details>
+                <details class="group py-6 cursor-pointer">
+                    <summary class="flex justify-between items-center list-none text-white font-bold uppercase text-body-lg">
+                        How soon can I expect to see results?
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant leading-relaxed">
+                        Many students land their first discovery call within the first 7 days of implementing the outreach module. Landing a paying client typically takes 14-30 days of consistent effort.
+                    </p>
+                </details>
+                <details class="group py-6 cursor-pointer">
+                    <summary class="flex justify-between items-center list-none text-white font-bold uppercase text-body-lg">
+                        Is this just about ChatGPT?
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant leading-relaxed">
+                        No. While ChatGPT is a component, the playbook covers the entire ecosystem: vector databases, automation platforms, custom RAG systems, and AI-driven CRM integration.
+                    </p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-primary/40 pt-20 pb-12 px-gutter">
+            <div class="max-w-container-max mx-auto flex flex-col items-center text-center gap-stack-lg">
+                <div class="space-y-4 reveal">
+                    <h2 class="text-white font-extrabold text-headline-md uppercase">Ready to start your agency?</h2>
+                    <button onclick="openPayPalModal()" class="inline-block bg-primary text-background font-bold px-12 py-5 hover:bg-white transition-all duration-300 uppercase active:scale-95 cursor-pointer">
+                        Start Today — $27
+                    </button>
+                </div>
+                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-8 border-t border-outline/10 pt-12">
+                    <div class="text-label-sm font-bold text-white uppercase tracking-tighter">AI Agency Playbook</div>
+                    <div class="flex gap-8">
+                        <a class="text-on-surface-variant hover:text-primary text-label-sm uppercase transition-colors" href="#">Privacy Policy</a>
+                        <a class="text-on-surface-variant hover:text-primary text-label-sm uppercase transition-colors" href="#">Terms of Service</a>
+                        <a class="text-on-surface-variant hover:text-primary text-label-sm uppercase transition-colors" href="#">Support</a>
+                    </div>
+                    <p class="text-on-surface-variant text-label-sm uppercase">© 2024 The Non-Technical AI Agency Playbook. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- PayPal Modal -->
+    <div id="paypal-modal" class="flex items-center justify-center p-4">
+        <div id="paypal-modal-content" class="bg-surface-container border border-outline/30 p-8 max-w-md w-full relative">
+            <!-- Close Button -->
+            <button onclick="closePayPalModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <!-- Modal Content -->
+            <div class="text-center mb-8">
+                <h3 class="text-headline-md text-white font-bold uppercase mb-2">Complete Your Purchase</h3>
+                <p class="text-on-surface-variant">Get instant access to the AI Agency Playbook</p>
+            </div>
+
+            <!-- Price Display -->
+            <div class="text-center mb-8 pb-8 border-b border-outline/20">
+                <span class="text-primary text-5xl font-extrabold">$27</span>
+                <span class="text-on-surface-variant text-label-sm uppercase block mt-2">One-Time Payment</span>
+            </div>
+
+            <!-- PayPal Buttons Container -->
+            <div id="paypal-modal-buttons" class="paypal-btn-container"></div>
+
+            <!-- Security Note -->
+            <div class="flex items-center justify-center gap-2 mt-6">
+                <span class="material-symbols-outlined text-primary text-sm">lock</span>
+                <span class="text-on-surface-variant text-label-sm">Secured by PayPal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PayPal JavaScript SDK - Reemplaza TU_CLIENT_ID_AQUI con tu Client ID real -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AXgcGbvzqQaW5le951HKgLmiHvpdeotbi60ebKw0DkPUKNsXvN7VQMYByZBZc4bIavM1Edr26lvSxr4r&currency=USD&intent=capture"></script>
+
+    <script>
+        // Disable mouse wheel zoom
+        window.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Disable pinch zoom on touch devices
+        window.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // ============================================
+        // CONFIGURACION - Reemplaza con tu Client ID
+        // ============================================
+        const PAYPAL_CLIENT_ID = 'AXgcGbvzqQaW5le951HKgLmiHvpdeotbi60ebKw0DkPUKNsXvN7VQMYByZBZc4bIavM1Edr26lvSxr4r';
+        const PRODUCT_PRICE = '27.00';
+        const PRODUCT_NAME = 'AI Agency Playbook';
+
+        // ============================================
+        // PAYPAL INTEGRATION
+        // ============================================
+
+        // Check if PayPal SDK loaded
+        function checkPayPalLoaded() {
+            if (typeof paypal !== 'undefined') {
+                initPayPalButtons();
+            } else {
+                // Show fallback button if PayPal doesn't load
+                document.getElementById('fallback-paypal-btn').style.display = 'block';
+                document.getElementById('paypal-button-container').style.display = 'none';
+            }
+        }
+
+        // Initialize PayPal Buttons
+        function initPayPalButtons() {
+            // Main page button
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'blue',
+                    shape: 'rect',
+                    label: 'pay',
+                    height: 55
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            description: PRODUCT_NAME,
+                            amount: {
+                                currency_code: 'USD',
+                                value: PRODUCT_PRICE
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Redirect to download page with transaction ID
+                        window.location.href = 'descarga.html?tx=' + data.orderID;
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('There was an error processing your payment. Please try again.');
+                }
+            }).render('#paypal-button-container');
+
+            // Modal buttons
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'blue',
+                    shape: 'rect',
+                    label: 'pay',
+                    height: 55
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            description: PRODUCT_NAME,
+                            amount: {
+                                currency_code: 'USD',
+                                value: PRODUCT_PRICE
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Redirect to download page with transaction ID
+                        window.location.href = 'descarga.html?tx=' + data.orderID;
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('There was an error processing your payment. Please try again.');
+                }
+            }).render('#paypal-modal-buttons');
+        }
+
+        // Wait for PayPal SDK to load
+        setTimeout(checkPayPalLoaded, 2000);
+
+        // ============================================
+        // MODAL FUNCTIONS
+        // ============================================
+
+        function openPayPalModal() {
+            document.getElementById('paypal-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePayPalModal() {
+            document.getElementById('paypal-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on outside click
+        document.getElementById('paypal-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePayPalModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePayPalModal();
+            }
+        });
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Smooth Scroll for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "ai-agency-playbook",
+  "version": "1.0.0",
+  "description": "Landing page for AI Agency Playbook with PayPal integration",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5"
+  }
+}

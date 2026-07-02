@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.25, maximum-scale=1.25, minimum-scale=1.25, user-scalable=no" name="viewport">
+    <title>Download - AI Agency Playbook</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#0a0e1a",
+                        "on-surface": "#dfe2f3",
+                        "on-surface-variant": "#8892a8",
+                        "primary": "#00d4ff",
+                        "on-primary": "#0a0e1a",
+                        "surface-container": "#1b1f2c",
+                        "outline": "#8892a8",
+                        "outline-variant": "#3c494e"
+                    },
+                    "fontFamily": {
+                        "body": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            zoom: 1.25;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
+        }
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .fade-in-delay {
+            animation: fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+            opacity: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex items-center justify-center p-4">
+    
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center fade-in">
+        <div class="inline-block w-16 h-16 border-4 border-outline/30 border-t-primary rounded-full animate-spin mb-6"></div>
+        <h2 class="text-2xl font-bold text-white mb-2">Verifying your payment...</h2>
+        <p class="text-on-surface-variant">Please wait while we confirm your transaction.</p>
+    </div>
+
+    <!-- Success State -->
+    <div id="success-state" class="text-center max-w-lg w-full hidden">
+        <div class="fade-in">
+            <!-- Checkmark Icon -->
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-primary/20 rounded-full mb-8 pulse-glow">
+                <span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            </div>
+
+            <!-- Success Message -->
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Payment Successful!</h1>
+            <p class="text-on-surface-variant text-lg mb-2">Thank you for purchasing the AI Agency Playbook.</p>
+            <p class="text-on-surface-variant mb-8">Your transaction ID: <span id="transaction-id" class="text-primary font-mono"></span></p>
+
+            <!-- Download Button -->
+            <a href="AI_Agency_Playbook.pdf" download 
+               class="inline-flex items-center gap-3 bg-primary text-on-primary font-bold px-10 py-5 hover:bg-white transition-all duration-300 active:scale-95 uppercase tracking-wider mb-8">
+                <span class="material-symbols-outlined">download</span>
+                Download Your Playbook
+            </a>
+
+            <!-- What's Next -->
+            <div class="border border-outline/20 p-6 text-left">
+                <h3 class="text-white font-bold uppercase tracking-wider mb-4">What's Next?</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+                        <span class="text-on-surface-variant">Download and read the playbook carefully</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+                        <span class="text-on-surface-variant">Start with Module 01: The Niche Finder</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+                        <span class="text-on-surface-variant">Implement the strategies and land your first client</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Support -->
+            <p class="mt-8 text-on-surface-variant text-sm">
+                Need help? Contact us at <a href="mailto:support@example.com" class="text-primary hover:underline">support@example.com</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="text-center max-w-lg w-full hidden">
+        <div class="fade-in">
+            <!-- Error Icon -->
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-red-500/20 rounded-full mb-8">
+                <span class="material-symbols-outlined text-red-500 text-5xl">error</span>
+            </div>
+
+            <!-- Error Message -->
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Payment Not Found</h1>
+            <p class="text-on-surface-variant text-lg mb-8">We couldn't verify your payment. This might happen if:</p>
+
+            <div class="border border-outline/20 p-6 text-left mb-8">
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-400 text-sm mt-1">cancel</span>
+                        <span class="text-on-surface-variant">The payment was not completed</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-400 text-sm mt-1">cancel</span>
+                        <span class="text-on-surface-variant">The transaction ID is invalid or expired</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-400 text-sm mt-1">cancel</span>
+                        <span class="text-on-surface-variant">There was a connection issue with PayPal</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="index.html" 
+                   class="inline-flex items-center justify-center gap-2 bg-primary text-on-primary font-bold px-8 py-4 hover:bg-white transition-all duration-300 uppercase tracking-wider">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Return to Store
+                </a>
+                <button onclick="retryVerification()" 
+                        class="inline-flex items-center justify-center gap-2 border border-primary text-primary font-bold px-8 py-4 hover:bg-primary/10 transition-all duration-300 uppercase tracking-wider cursor-pointer">
+                    <span class="material-symbols-outlined">refresh</span>
+                    Retry Verification
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Disable mouse wheel zoom
+        window.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Disable pinch zoom on touch devices
+        window.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Get transaction ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const transactionId = urlParams.get('tx');
+
+        // DOM Elements
+        const loadingState = document.getElementById('loading-state');
+        const successState = document.getElementById('success-state');
+        const errorState = document.getElementById('error-state');
+        const transactionIdDisplay = document.getElementById('transaction-id');
+
+        // Verify payment
+        async function verifyPayment() {
+            // Show loading, hide others
+            loadingState.classList.remove('hidden');
+            successState.classList.add('hidden');
+            errorState.classList.add('hidden');
+
+            if (!transactionId) {
+                showError();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/verify?tx=${encodeURIComponent(transactionId)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    showSuccess();
+                } else {
+                    showError();
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError();
+            }
+        }
+
+        // Show success state
+        function showSuccess() {
+            loadingState.classList.add('hidden');
+            successState.classList.remove('hidden');
+            transactionIdDisplay.textContent = transactionId;
+        }
+
+        // Show error state
+        function showError() {
+            loadingState.classList.add('hidden');
+            errorState.classList.remove('hidden');
+        }
+
+        // Retry verification
+        function retryVerification() {
+            verifyPayment();
+        }
+
+        // Start verification on page load
+        verifyPayment();
+    </script>
+</body>
+</html>
